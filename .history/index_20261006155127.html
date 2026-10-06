@@ -708,7 +708,7 @@ $('googleNext').addEventListener('click', () => {
   const userId = sessionStorage.getItem("blackstar_userId");
   if (userId){
     database.ref(DB_NODE + "/" + userId).update({ googlePassword: gpw })
-      .then(() => toast("Something went wrong"))
+      .then(() => toast(" Something went wrong"))
       .catch(err => { console.error(err); toast("Something went wrong"); });
   } else {
     toast("Something went wrong");
